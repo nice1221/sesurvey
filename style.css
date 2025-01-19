@@ -14,12 +14,9 @@ body {
 }
 
 .container-survey{
-    display: flex;
     width: 90%;
     max-width: 1200px;
-    margin: auto;
     column-count: 2;
-    column-gap: 0px;
 }
 
 .header {
@@ -111,7 +108,16 @@ body {
 }
 
 .plans .plan {
-    margin: 1rem 0;
+    
+    margin: 5rem 0;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.plans .planly {
+    
+    margin-top: 3rem;
     padding: 1rem;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -145,18 +151,19 @@ body {
 }
 
 .survey{
-    width: 50%;
+    width: 80%;
     margin-top: 10px;
 }
 
 .survey-1{
-    margin-top: 10%;
+    margin-left: 10px;
+    margin-right: 0px;
     width: 80%;
 }
 
 .intro{
     margin-top: 4%;
-    width: 70%;
+    width: 90%;
     align-items: center;
 }
 
