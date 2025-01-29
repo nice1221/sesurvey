@@ -17,6 +17,7 @@ body {
     width: 90%;
     max-width: 1200px;
     column-count: 2;
+    margin: auto;
 }
 
 .header {
@@ -111,16 +112,25 @@ body {
     
     margin: 5rem 0;
     padding: 1rem;
+    /* border: 1px solid #ccc;
+    border-radius: 5px; */
+}
+
+.plans .planlly {
+    
+    margin: 5rem 0;
+    padding: 1rem;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
 .plans .planly {
     
-    margin-top: 3rem;
+    margin: 5rem 0;
     padding: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    /* border: 1px solid #ccc;
+    border-radius: 5px; */
+    text-align: left;
 }
 
 .plans .plan p{
