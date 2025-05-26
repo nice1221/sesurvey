@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>แบบฟอร์มใบสมัครงาน</title>
+    <title>สมัครงาน</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -21,7 +21,6 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 500px;
-            /* เพิ่มการจัดกึ่งกลางเนื้อหาภายใน container */
             text-align: center;
         }
         h2 {
@@ -31,7 +30,7 @@
         }
         .form-group {
             margin-bottom: 15px;
-            text-align: left; /* ให้ label และ input ชิดซ้ายใน form-group */
+            text-align: left;
         }
         .form-group label {
             display: block;
@@ -50,7 +49,7 @@
             box-sizing: border-box;
             font-size: 16px;
         }
-        .form-group input[type="submit"] {
+        .form-group button[type="submit"] { 
             background-color: #007bff;
             color: white;
             padding: 12px 20px;
@@ -60,17 +59,26 @@
             font-size: 18px;
             width: 100%;
             margin-top: 20px;
+            display: flex; 
+            align-items: center;
+            justify-content: center;
+            gap: 10px; 
+            transition: background-color 0.3s ease;
         }
-        .form-group input[type="submit"]:hover {
+        .form-group button[type="submit"]:hover:not(:disabled) { 
             background-color: #0056b3;
         }
-        /* Style สำหรับข้อความตอบกลับ */
+        .form-group button[type="submit"]:disabled { 
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
         #responseMessage {
             margin-top: 20px;
             padding: 10px;
             border-radius: 5px;
-            display: none; /* ซ่อนไว้ก่อน */
-            text-align: center; /* จัดกึ่งกลางข้อความตอบกลับ */
+            display: none;
+            text-align: center;
         }
         #responseMessage.success {
             background-color: #d4edda;
@@ -82,12 +90,29 @@
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
+
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3); 
+            border-top: 4px solid #ffffff; 
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite; 
+            display: none; 
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>สมัครงาน</h2>
-        <form id="jobApplicationForm"> <div class="form-group">
+        <form id="jobApplicationForm">
+            <div class="form-group">
                 <label for="fullName">ชื่อ-นามสกุล:</label>
                 <input type="text" id="fullName" name="fullName" required>
             </div>
@@ -109,7 +134,7 @@
 
             <div class="form-group">
                 <label for="position">ตำแหน่งที่ต้องการสมัคร:</label>
-                <select id="position" name="position" required> 
+                <select id="position" name="position" required>
                     <option value="">-- กรุณาเลือกตำแหน่งที่ต้องการสมัคร --</option>
                     <option value="เจ้าหน้าที่เทคโนโลยีสารสนเทศ ( IT )">เจ้าหน้าที่เทคโนโลยีสารสนเทศ ( IT )</option>
                     <option value="เจ้าหน้าที่สำรวจอุบัติเหตุ ( Surveyor )">เจ้าหน้าที่สำรวจอุบัติเหตุ ( Surveyor )</option>
@@ -136,31 +161,41 @@
             </div>
 
             <div class="form-group">
-                <input type="submit" value="ส่งใบสมัคร">
+                <button type="submit" id="submitButton">
+                    <span id="buttonText">ส่งใบสมัคร</span>
+                    <div class="spinner" id="buttonSpinner"></div>
+                </button>
             </div>
         </form>
 
-        <div id="responseMessage"></div> </div>
+        <div id="responseMessage"></div>
+    </div>
 
     <script>
         const form = document.getElementById('jobApplicationForm');
         const responseMessage = document.getElementById('responseMessage');
+        const submitButton = document.getElementById('submitButton'); 
+        const buttonText = document.getElementById('buttonText');    
+        const buttonSpinner = document.getElementById('buttonSpinner'); 
+
         const scriptURL = 'https://script.google.com/macros/s/AKfycbw483aOJKeExNobLCJalt-9JlLiFzYujSQ8ncQCt-SV5b3bQqyy0k-yOw7NLras_ZUnpw/exec'; // *** ใส่ URL ของ Google Apps Script Web App ที่นี่ ***
-        const redirectURL = 'index.html'; // *** URL ของหน้าที่ต้องการให้เปลี่ยนไป (เช่น index.html) ***
-        const redirectDelay = 3000; // 3000 มิลลิวินาที = 3 วินาที
+        const redirectURL = 'index.html'; 
+        const redirectDelay = 3000; 
 
         form.addEventListener('submit', function(e) {
-            e.preventDefault(); // ป้องกันไม่ให้ฟอร์มส่งตามปกติ
+            e.preventDefault();
 
-            // ซ่อนข้อความตอบกลับเดิมและล้าง class
+            // *** 1. แสดงสถานะกำลังส่ง ***
+            submitButton.disabled = true; // ปิดการใช้งานปุ่ม
+            buttonText.textContent = 'กำลังส่ง...'; // เปลี่ยนข้อความ
+            buttonSpinner.style.display = 'block'; // แสดง spinner
+
             responseMessage.style.display = 'none';
             responseMessage.className = '';
             responseMessage.textContent = '';
 
-            // สร้าง FormData object จากฟอร์ม
             const formData = new FormData(form);
 
-            // ส่งข้อมูลไปยัง Google Apps Script
             fetch(scriptURL, {
                 method: 'POST',
                 body: formData
@@ -172,12 +207,17 @@
                 return response.json();
             })
             .then(data => {
+                // *** 2. ซ่อนสถานะกำลังส่ง และแสดงผลลัพธ์ ***
+                submitButton.disabled = false; // เปิดการใช้งานปุ่ม
+                buttonText.textContent = 'ส่งใบสมัคร'; // เปลี่ยนข้อความกลับ
+                buttonSpinner.style.display = 'none'; // ซ่อน spinner
+
                 if (data.status === 'success') {
                     responseMessage.textContent = 'ส่งใบสมัครสำเร็จ! ' + data.message + ' กำลังเปลี่ยนหน้า...';
                     responseMessage.className = 'success';
                     responseMessage.style.display = 'block';
+                    form.reset(); // ล้างฟอร์ม
 
-                    // ตั้งเวลาเปลี่ยนหน้าหลังจาก 3 วินาที
                     setTimeout(() => {
                         window.location.href = redirectURL;
                     }, redirectDelay);
@@ -189,6 +229,11 @@
                 }
             })
             .catch(error => {
+                // *** 2. ซ่อนสถานะกำลังส่ง และแสดงผลลัพธ์ (กรณีเกิดข้อผิดพลาด) ***
+                submitButton.disabled = false; // เปิดการใช้งานปุ่ม
+                buttonText.textContent = 'ส่งใบสมัคร'; // เปลี่ยนข้อความกลับ
+                buttonSpinner.style.display = 'none'; // ซ่อน spinner
+
                 console.error('Error!', error);
                 responseMessage.textContent = 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ หรือเกิดข้อผิดพลาด: ' + error.message;
                 responseMessage.className = 'error';
