@@ -21,6 +21,8 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 500px;
+            /* เพิ่มการจัดกึ่งกลางเนื้อหาภายใน container */
+            text-align: center;
         }
         h2 {
             text-align: center;
@@ -29,6 +31,7 @@
         }
         .form-group {
             margin-bottom: 15px;
+            text-align: left; /* ให้ label และ input ชิดซ้ายใน form-group */
         }
         .form-group label {
             display: block;
@@ -61,13 +64,30 @@
         .form-group input[type="submit"]:hover {
             background-color: #0056b3;
         }
+        /* Style สำหรับข้อความตอบกลับ */
+        #responseMessage {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none; /* ซ่อนไว้ก่อน */
+            text-align: center; /* จัดกึ่งกลางข้อความตอบกลับ */
+        }
+        #responseMessage.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        #responseMessage.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>สมัครงาน</h2>
-        <form action="https://script.google.com/macros/s/AKfycbyGuSd2RaSGaHfN-5d1C6mXK8GOGpVtlMAN3dDW4e28JcDNR25tvpHzaFmhAY7feFLv6w/exec" method="post">
-            <div class="form-group">
+        <form id="jobApplicationForm"> <div class="form-group">
                 <label for="fullName">ชื่อ-นามสกุล:</label>
                 <input type="text" id="fullName" name="fullName" required>
             </div>
@@ -88,8 +108,8 @@
             </div>
 
             <div class="form-group">
-                <label for="education">ตำแหน่งที่ต้องการสมัคร:</label>
-                <select id="education" name="position" required>
+                <label for="position">ตำแหน่งที่ต้องการสมัคร:</label>
+                <select id="position" name="position" required> 
                     <option value="">-- กรุณาเลือกตำแหน่งที่ต้องการสมัคร --</option>
                     <option value="เจ้าหน้าที่เทคโนโลยีสารสนเทศ ( IT )">เจ้าหน้าที่เทคโนโลยีสารสนเทศ ( IT )</option>
                     <option value="เจ้าหน้าที่สำรวจอุบัติเหตุ ( Surveyor )">เจ้าหน้าที่สำรวจอุบัติเหตุ ( Surveyor )</option>
@@ -119,6 +139,62 @@
                 <input type="submit" value="ส่งใบสมัคร">
             </div>
         </form>
-    </div>
+
+        <div id="responseMessage"></div> </div>
+
+    <script>
+        const form = document.getElementById('jobApplicationForm');
+        const responseMessage = document.getElementById('responseMessage');
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbw483aOJKeExNobLCJalt-9JlLiFzYujSQ8ncQCt-SV5b3bQqyy0k-yOw7NLras_ZUnpw/exec'; // *** ใส่ URL ของ Google Apps Script Web App ที่นี่ ***
+        const redirectURL = 'index.html'; // *** URL ของหน้าที่ต้องการให้เปลี่ยนไป (เช่น index.html) ***
+        const redirectDelay = 3000; // 3000 มิลลิวินาที = 3 วินาที
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // ป้องกันไม่ให้ฟอร์มส่งตามปกติ
+
+            // ซ่อนข้อความตอบกลับเดิมและล้าง class
+            responseMessage.style.display = 'none';
+            responseMessage.className = '';
+            responseMessage.textContent = '';
+
+            // สร้าง FormData object จากฟอร์ม
+            const formData = new FormData(form);
+
+            // ส่งข้อมูลไปยัง Google Apps Script
+            fetch(scriptURL, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    responseMessage.textContent = 'ส่งใบสมัครสำเร็จ! ' + data.message + ' กำลังเปลี่ยนหน้า...';
+                    responseMessage.className = 'success';
+                    responseMessage.style.display = 'block';
+
+                    // ตั้งเวลาเปลี่ยนหน้าหลังจาก 3 วินาที
+                    setTimeout(() => {
+                        window.location.href = redirectURL;
+                    }, redirectDelay);
+
+                } else {
+                    responseMessage.textContent = 'เกิดข้อผิดพลาดในการส่ง: ' + (data.message || 'ไม่ทราบข้อผิดพลาด');
+                    responseMessage.className = 'error';
+                    responseMessage.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error!', error);
+                responseMessage.textContent = 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ หรือเกิดข้อผิดพลาด: ' + error.message;
+                responseMessage.className = 'error';
+                responseMessage.style.display = 'block';
+            });
+        });
+    </script>
 </body>
 </html>
