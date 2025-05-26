@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบฟอร์มใบสมัครงาน</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="tel"],
+        .form-group select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .form-group input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .form-group input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>สมัครงาน</h2>
+        <form action="https://script.google.com/macros/s/AKfycbyOFUTZ548Piv912wpo-f_vVPKgoFt8yG1N8hAzyrGNth1qI0ulDpNK0B30GVE81jSf/exec" method="post">
+            <div class="form-group">
+                <label for="fullName">ชื่อ-นามสกุล:</label>
+                <input type="text" id="fullName" name="fullName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address">สถานที่อยู่ปัจจุบัน:</label>
+                <input type="text" id="address" name="address" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">เบอร์โทรศัพท์:</label>
+                <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" placeholder="เช่น 08XXXXXXXX" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="education">ตำแหน่งที่ต้องการสมัคร:</label>
+                <select id="education" name="position" required>
+                    <option value="">-- กรุณาเลือกตำแหน่งที่ต้องการสมัคร --</option>
+                    <option value="เจ้าหน้าที่เทคโนโลยีสารสนเทศ ( IT )">เจ้าหน้าที่เทคโนโลยีสารสนเทศ ( IT )</option>
+                    <option value="เจ้าหน้าที่สำรวจอุบัติเหตุ ( Surveyor )">เจ้าหน้าที่สำรวจอุบัติเหตุ ( Surveyor )</option>
+                    <option value="เจ้าหน้าที่การเงินและบัญชี">เจ้าหน้าที่การเงินและบัญชี</option>
+                    <option value="เจ้าหน้าที่ธุรการ">เจ้าหน้าที่ธุรการ</option>
+                    <option value="เจ้าหน้าที่บันทึกข้อมูล">เจ้าหน้าที่บันทึกข้อมูล</option>
+                    <option value="เจ้าหน้าที่รับแจ้งอุบัติเหตุ ( Call Center )">เจ้าหน้าที่รับแจ้งอุบัติเหตุ ( Call Center )</option>
+                    <option value="ผู้ตรวจรายงานสำรวจอุบัติเหตุ">ผู้ตรวจรายงานสำรวจอุบัติเหตุ</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="education">วุฒิการศึกษา:</label>
+                <select id="education" name="education" required>
+                    <option value="">-- กรุณาเลือกวุฒิการศึกษา --</option>
+                    <option value="มัธยมศึกษาตอนปลาย">มัธยมศึกษาตอนปลาย</option>
+                    <option value="ปวช.">ปวช.</option>
+                    <option value="ปวส.">ปวส.</option>
+                    <option value="ปริญญาตรี">ปริญญาตรี</option>
+                    <option value="ปริญญาโท">ปริญญาโท</option>
+                    <option value="ปริญญาเอก">ปริญญาเอก</option>
+                    <option value="อื่นๆ">อื่นๆ</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="ส่งใบสมัคร">
+            </div>
+        </form>
+    </div>
+</body>
+</html>
